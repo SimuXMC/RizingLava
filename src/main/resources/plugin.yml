@@ -1,0 +1,6 @@
+name: RizingLava
+version: '${version}'
+main: com.github.simuxmc.rizinglava.RizingLava
+api-version: '1.20'
+authors: [hapily]
+website: https://github.com/SimuXMC/RizingLava
