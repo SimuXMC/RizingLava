@@ -29,8 +29,7 @@ public class PingCommand extends Command {
 		for (Player p : targets) {
 			p.setGameMode(GameMode.SURVIVAL);
 			Component feedback = miniMessage.deserialize(
-					"<gold>Essentials> <green>" + p.getName() +
-							"<yellow>'s ping: <green>" + p.getPing() + "ms<yellow>.");
+					"<gold>Essentials> <green>" + p.getName() + "<yellow>'s ping: <green>" + p.getPing() + "ms");
 			sender.sendMessage(feedback);
 		}
 	}
@@ -38,7 +37,7 @@ public class PingCommand extends Command {
 	@Override
 	public Argument<?>[] optionalArguments() {
 		Argument<Collection> playerArgument =
-				new EntitySelectorArgument.ManyPlayers(CommandUtils.OPTIONAL_PLAYER_ARGUMENT_NAME).instance();
+				new EntitySelectorArgument.ManyPlayers(CommandUtils.PLAYER_ARGUMENT_NAME).instance();
 		return new Argument[]{playerArgument};
 	}
 

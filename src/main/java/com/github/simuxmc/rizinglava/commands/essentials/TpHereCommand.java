@@ -8,44 +8,46 @@ import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
-@CommandName("fly")
-public class FlyCommand extends Command {
+@CommandName("tphere")
+public class TpHereCommand extends Command {
 
-	public FlyCommand(String commandName) {
+	public TpHereCommand(String commandName) {
 		super(commandName);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void executes(CommandSender sender, CommandArguments args) {
 		MiniMessage miniMessage = MiniMessage.miniMessage();
-		Collection<Player> targets = CommandUtils.getTargets(miniMessage, sender, args);
-		if (targets == null) return;
+		Collection<Player> targets = (Collection<Player>) args.get(CommandUtils.PLAYER_ARGUMENT_NAME);
+		assert targets != null; // required argument
+		Location location = ((Player) sender).getLocation();
 		for (Player p : targets) {
-			boolean isAllowedToFly = p.getAllowFlight();
-			p.setAllowFlight(!isAllowedToFly);
-			String visual = (!isAllowedToFly ? "<green>en" : "<red>dis") + "abled";
+			p.teleport(location);
 			Component feedback = miniMessage.deserialize(
-					"<gold>Essentials> <green>" + p.getName() +
-							"<yellow>'s flight: " + visual);
+					"<gold>Essentials> <green>" + p.getName() + " <yellow>has been teleported to you.");
 			sender.sendMessage(feedback);
 		}
 	}
 
 	@Override
-	public Argument<?>[] optionalArguments() {
+	public Argument<?>[] arguments() {
 		Argument<Collection> playerArgument =
 				new EntitySelectorArgument.ManyPlayers(CommandUtils.PLAYER_ARGUMENT_NAME).instance();
 		return new Argument[]{playerArgument};
 	}
 
 	@Override
-	public String permission() {
-		return "rizinglava.fly";
+	public Predicate<CommandSender> requirement() {
+		return commandSender -> commandSender instanceof Player;
 	}
 
 }

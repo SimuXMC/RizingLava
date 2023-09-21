@@ -33,14 +33,18 @@ public class ForceFieldHandler implements Listener {
 					nearbyEntities.remove(player);
 					nearbyEntities = nearbyEntities.stream().filter(entity -> entity instanceof Player).toList();
 					for (Entity entity : nearbyEntities) {
-						Location playerLoc = player.getLocation();
-						Location entityLoc = entity.getLocation();
-						double xDif = entityLoc.getX()-playerLoc.getX();
-						double yDif = (entityLoc.getY()-playerLoc.getY())+1.25;
-						double zDif = entityLoc.getZ()-playerLoc.getZ();
-						Vector vector = new Vector(xDif, yDif, zDif).multiply(0.2);
-						entity.setVelocity(vector);
-						entityLoc.getWorld().playSound(entityLoc, Sound.ENTITY_CHICKEN_EGG, 1.5f, 0.5f);
+						PlayerForceFieldEvent event = new PlayerForceFieldEvent(player, (Player) entity);
+						pluginManager.callEvent(event);
+						if (!event.isCancelled()) {
+							Location playerLoc = player.getLocation();
+							Location entityLoc = entity.getLocation();
+							double xDif = entityLoc.getX() - playerLoc.getX();
+							double yDif = (entityLoc.getY() - playerLoc.getY()) + 1.25;
+							double zDif = entityLoc.getZ() - playerLoc.getZ();
+							Vector vector = new Vector(xDif, yDif, zDif).multiply(0.2);
+							entity.setVelocity(vector);
+							entityLoc.getWorld().playSound(entityLoc, Sound.ENTITY_CHICKEN_EGG, 1.5f, 0.5f);
+						}
 					}
 				}
 			}

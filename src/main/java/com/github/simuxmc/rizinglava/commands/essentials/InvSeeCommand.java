@@ -12,40 +12,36 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
-@CommandName("fly")
-public class FlyCommand extends Command {
+@CommandName("invsee")
+public class InvSeeCommand extends Command {
 
-	public FlyCommand(String commandName) {
+	public InvSeeCommand(String commandName) {
 		super(commandName);
 	}
 
 	@Override
 	protected void executes(CommandSender sender, CommandArguments args) {
 		MiniMessage miniMessage = MiniMessage.miniMessage();
-		Collection<Player> targets = CommandUtils.getTargets(miniMessage, sender, args);
-		if (targets == null) return;
-		for (Player p : targets) {
-			boolean isAllowedToFly = p.getAllowFlight();
-			p.setAllowFlight(!isAllowedToFly);
-			String visual = (!isAllowedToFly ? "<green>en" : "<red>dis") + "abled";
-			Component feedback = miniMessage.deserialize(
-					"<gold>Essentials> <green>" + p.getName() +
-							"<yellow>'s flight: " + visual);
-			sender.sendMessage(feedback);
-		}
+		Player target = (Player) args.get(CommandUtils.PLAYER_ARGUMENT_NAME);
+		assert target != null; // required argument
+		((Player) sender).openInventory(target.getInventory());
+		Component feedback = miniMessage.deserialize(
+				"<gold>Essentials> <yellow>You are now viewing <green>" + target.getName() + "<yellow>'s inventory.");
+		sender.sendMessage(feedback);
 	}
 
 	@Override
-	public Argument<?>[] optionalArguments() {
-		Argument<Collection> playerArgument =
-				new EntitySelectorArgument.ManyPlayers(CommandUtils.PLAYER_ARGUMENT_NAME).instance();
+	public Argument<?>[] arguments() {
+		Argument<Player> playerArgument =
+				new EntitySelectorArgument.OnePlayer(CommandUtils.PLAYER_ARGUMENT_NAME).instance();
 		return new Argument[]{playerArgument};
 	}
 
 	@Override
-	public String permission() {
-		return "rizinglava.fly";
+	public Predicate<CommandSender> requirement() {
+		return commandSender -> commandSender instanceof Player;
 	}
 
 }

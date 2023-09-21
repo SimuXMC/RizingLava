@@ -40,7 +40,7 @@ public class HealCommand extends Command {
 	@Override
 	public Argument<?>[] optionalArguments() {
 		Argument<Collection> playerArgument =
-				new EntitySelectorArgument.ManyPlayers(CommandUtils.OPTIONAL_PLAYER_ARGUMENT_NAME).instance();
+				new EntitySelectorArgument.ManyPlayers(CommandUtils.PLAYER_ARGUMENT_NAME).instance();
 		return new Argument[]{playerArgument};
 	}
 
