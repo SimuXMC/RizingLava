@@ -27,7 +27,6 @@ public class PingCommand extends Command {
 		Collection<Player> targets = CommandUtils.getTargets(miniMessage, sender, args);
 		if (targets == null) return;
 		for (Player p : targets) {
-			p.setGameMode(GameMode.SURVIVAL);
 			Component feedback = miniMessage.deserialize(
 					"<gold>Essentials> <green>" + p.getName() + "<yellow>'s ping: <green>" + p.getPing() + "ms");
 			sender.sendMessage(feedback);
