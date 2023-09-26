@@ -1,9 +1,10 @@
 package com.github.simuxmc.rizinglava;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.github.simuxmc.rizinglava.chat.ChatModule;
+import com.github.simuxmc.rizinglava.modules.ChatModule;
 import com.github.simuxmc.rizinglava.commands.Command;
 import com.github.simuxmc.rizinglava.commands.forcefield.ForceFieldHandler;
+import com.github.simuxmc.rizinglava.modules.SpawnModule;
 import com.github.simuxmc.rizinglava.serialization.DataSerializer;
 import com.github.simuxmc.rizinglava.serialization.kryo.KryoSerializer;
 import dev.jorel.commandapi.CommandAPI;
@@ -35,6 +36,7 @@ public final class RizingLava extends JavaPlugin{
         dataSerializer = new KryoSerializer(new Kryo(), this);
         CommandAPI.onEnable();
         PluginManager pluginManager = Bukkit.getPluginManager();
+        pluginManager.registerEvents(new SpawnModule(), this);
         forceFieldHandler = new ForceFieldHandler(pluginManager, this);
         MiniMessage miniMessage = MiniMessage.miniMessage();
         if (!setupChat(miniMessage)) {

@@ -1,4 +1,4 @@
-package com.github.simuxmc.rizinglava.chat;
+package com.github.simuxmc.rizinglava.modules;
 
 import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -11,6 +11,8 @@ import net.milkbowl.vault.chat.Chat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class ChatModule implements Listener {
@@ -24,7 +26,7 @@ public class ChatModule implements Listener {
 	}
 
 	@EventHandler
-	protected void onChat(AsyncChatEvent event) {
+	private void onChat(AsyncChatEvent event) {
 		event.renderer(new ChatRenderer() {
 			@Override
 			public @NotNull Component render(@NotNull Player source, @NotNull Component sourceDisplayName,
@@ -38,6 +40,25 @@ public class ChatModule implements Listener {
 						prefix, displayName, suffix, msg);
 			}
 		});
+	}
+
+	@EventHandler
+	private void onJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		TagResolver prefix = Placeholder.parsed("prefix", chat.getPlayerPrefix(player));
+		TagResolver displayName = Placeholder.component("displayname", player.displayName());
+		Component joinMessage = miniMessage.deserialize("<green>→ <prefix><displayname>", prefix, displayName);
+		event.joinMessage(joinMessage);
+	}
+
+	@EventHandler
+	private void onQuit(PlayerQuitEvent event) {
+		/*Player player = event.getPlayer();
+		TagResolver prefix = Placeholder.parsed("prefix", chat.getPlayerPrefix(player));
+		TagResolver displayName = Placeholder.component("displayname", player.displayName());
+		Component quitMessage = miniMessage.deserialize("<red>← <prefix><displayname>", prefix, displayName);*/
+		Component quitMessage = Component.empty(); // disabled for player retention
+		event.quitMessage(quitMessage);
 	}
 
 	public Chat getChat() {
