@@ -12,7 +12,6 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class SpawnModule implements Listener {
 
 	@EventHandler
@@ -48,7 +47,7 @@ public class SpawnModule implements Listener {
 	@EventHandler
 	private void onDrop(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
-		if (!isInSpawn(player)) event.setCancelled(true);
+		if (isInSpawn(player)) event.setCancelled(true);
 	}
 
 	@EventHandler
@@ -56,6 +55,7 @@ public class SpawnModule implements Listener {
 		if (isInSpawn((Player) event.getEntity())) event.setCancelled(true);
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	private boolean isInCreative(Player player) {
 		return player.getGameMode() == GameMode.CREATIVE;
 	}
