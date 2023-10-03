@@ -5,6 +5,7 @@ import com.github.simuxmc.rizinglava.modules.ChatModule;
 import com.github.simuxmc.rizinglava.commands.Command;
 import com.github.simuxmc.rizinglava.commands.forcefield.ForceFieldHandler;
 import com.github.simuxmc.rizinglava.modules.SpawnModule;
+import com.github.simuxmc.rizinglava.modules.SpeedModule;
 import com.github.simuxmc.rizinglava.serialization.DataSerializer;
 import com.github.simuxmc.rizinglava.serialization.kryo.KryoSerializer;
 import dev.jorel.commandapi.CommandAPI;
@@ -37,6 +38,7 @@ public final class RizingLava extends JavaPlugin{
         CommandAPI.onEnable();
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new SpawnModule(), this);
+        pluginManager.registerEvents(new SpeedModule(), this);
         forceFieldHandler = new ForceFieldHandler(pluginManager, this);
         MiniMessage miniMessage = MiniMessage.miniMessage();
         if (!setupChat(miniMessage)) {
