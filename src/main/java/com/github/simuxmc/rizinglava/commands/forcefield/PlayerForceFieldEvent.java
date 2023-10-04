@@ -9,16 +9,11 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerForceFieldEvent extends PlayerEvent implements Cancellable {
 
 	private static final HandlerList handlers = new HandlerList();
-	private final Player victim;
+
 	private boolean cancelled = false;
 
-	public PlayerForceFieldEvent(@NotNull Player who, @NotNull Player victim) {
+	public PlayerForceFieldEvent(@NotNull Player who) {
 		super(who);
-		this.victim = victim;
-	}
-
-	public Player getVictim() {
-		return victim;
 	}
 
 	@Override

@@ -29,22 +29,21 @@ public class ForceFieldHandler implements Listener {
 				// TODO create forcefield event and call it here so it can be cancelled elsewhere if necessary (if player
 				// TODO is spectating, in-game, etc.)
 				for (Player player : forceFieldPlayers) {
+					PlayerForceFieldEvent event = new PlayerForceFieldEvent(player);
+					pluginManager.callEvent(event);
+					if (!event.isCancelled()) continue;
 					List<Entity> nearbyEntities = player.getNearbyEntities(2.25, 3, 2.25);
 					nearbyEntities.remove(player);
 					nearbyEntities = nearbyEntities.stream().filter(entity -> entity instanceof Player).toList();
 					for (Entity entity : nearbyEntities) {
-						PlayerForceFieldEvent event = new PlayerForceFieldEvent(player, (Player) entity);
-						pluginManager.callEvent(event);
-						if (!event.isCancelled()) {
-							Location playerLoc = player.getLocation();
-							Location entityLoc = entity.getLocation();
-							double xDif = entityLoc.getX() - playerLoc.getX();
-							double yDif = (entityLoc.getY() - playerLoc.getY()) + 1.25;
-							double zDif = entityLoc.getZ() - playerLoc.getZ();
-							Vector vector = new Vector(xDif, yDif, zDif).multiply(0.2);
-							entity.setVelocity(vector);
-							entityLoc.getWorld().playSound(entityLoc, Sound.ENTITY_CHICKEN_EGG, 1.5f, 0.5f);
-						}
+						Location playerLoc = player.getLocation();
+						Location entityLoc = entity.getLocation();
+						double xDif = entityLoc.getX() - playerLoc.getX();
+						double yDif = (entityLoc.getY() - playerLoc.getY()) + 1.25;
+						double zDif = entityLoc.getZ() - playerLoc.getZ();
+						Vector vector = new Vector(xDif, yDif, zDif).multiply(0.2);
+						entity.setVelocity(vector);
+						entityLoc.getWorld().playSound(entityLoc, Sound.ENTITY_CHICKEN_EGG, 1.5f, 0.5f);
 					}
 				}
 			}
