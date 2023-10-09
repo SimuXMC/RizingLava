@@ -159,6 +159,14 @@ public class ItemBuilder {
 		return this;
 	}
 
+	/**
+	 * Compiles all of the item modifications on the item being built by this {@link ItemBuilder} into an {@link Item}
+	 * that you can use to get the effective {@link ItemStack}.
+	 *
+	 * @return an {@link Item}
+	 * @see Item#getItem()
+	 * @see	Item#getOriginalItem()
+	 */
 	public Item build() {
 		itemStack.setItemMeta(itemMeta);
 		return new Item(itemStack);
@@ -172,8 +180,24 @@ public class ItemBuilder {
 			this.itemStack = itemStack;
 		}
 
+		/**
+		 * Retrieves a copy of the original {@link ItemStack} <br>
+		 * This method should almost always be the one being called as it allows for safe modification later on.
+		 *
+		 * @return a copy of the original {@link ItemStack}
+		 */
 		public ItemStack getItem() {
 			return itemStack.clone();
+		}
+
+		/**
+		 * Retrieves the exact original {@link ItemStack} built by the {@link ItemBuilder} <br>
+		 *
+		 * @return the exact original {@link ItemStack}
+		 * @see Item#getItem()
+		 */
+		public ItemStack getOriginalItem() {
+			return itemStack;
 		}
 
 		@SuppressWarnings("EqualsWhichDoesntCheckParameterClass") // effectively using the ItemStack's equals

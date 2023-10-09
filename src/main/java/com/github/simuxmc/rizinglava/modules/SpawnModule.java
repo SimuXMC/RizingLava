@@ -28,15 +28,15 @@ import org.bukkit.inventory.PlayerInventory;
 public class SpawnModule implements Listener {
 
 	private final ItemBuilder.Item QUEUE_STAR = new ItemBuilder(Material.NETHER_STAR)
-			.named("(Left) Toggle Auto Queue | (Right) Queue") // TODO color
+			.named("<#88FF00>(Left) <#D2FF9E>Auto Queue <white>| <#00FF49>(Right) <#B3FDC8>Queue")
 			.build();
-	private final ItemBuilder.Item COSMETICS_CHEST = new ItemBuilder(Material.ENDER_CHEST)
-			.named("Cosmetics") // TODO color
+	private final ItemBuilder.Item COSMETICS_CHEST = new ItemBuilder(Material.CHEST)
+			.named("<gradient:#F4D03F:#DC7633>Cosmetics")
 			.build();
 
 	private final ItemBuilder.Item SETTINGS_HEAD = new SkullItemBuilder(
 			"https://textures.minecraft.net/texture/e4d49bae95c790c3b1ff5b2f01052a714d6185481d5b1c85930b3f99d2321674")
-			.named("Settings") // TODO color
+			.named("<#A5C5AE>Settings")
 			.build();
 
 	@EventHandler
@@ -102,7 +102,9 @@ public class SpawnModule implements Listener {
 		Player player = (Player) event.getWhoClicked();
 		if (!isInSpawn(player)) return;
 		if (isInCreative(player)) return;
-		if (player.getOpenInventory().getType() == InventoryType.CRAFTING) event.setCancelled(true);
+		System.out.println(player.getOpenInventory().getType());
+		InventoryType type = player.getOpenInventory().getType();
+		if (type == InventoryType.CRAFTING || type == InventoryType.PLAYER) event.setCancelled(true);
  	}
 
 	@EventHandler
