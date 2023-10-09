@@ -3,17 +3,12 @@ package com.github.simuxmc.rizinglava.commands.forcefield;
 import com.github.simuxmc.rizinglava.RizingLava;
 import com.github.simuxmc.rizinglava.commands.Command;
 import com.github.simuxmc.rizinglava.commands.CommandName;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.executors.CommandArguments;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
 import java.util.function.Predicate;
 
 @CommandName("forcefield")

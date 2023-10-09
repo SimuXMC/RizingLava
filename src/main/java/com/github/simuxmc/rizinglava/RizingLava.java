@@ -1,9 +1,9 @@
 package com.github.simuxmc.rizinglava;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.github.simuxmc.rizinglava.modules.ChatModule;
 import com.github.simuxmc.rizinglava.commands.Command;
 import com.github.simuxmc.rizinglava.commands.forcefield.ForceFieldHandler;
+import com.github.simuxmc.rizinglava.modules.ChatModule;
 import com.github.simuxmc.rizinglava.modules.SpawnModule;
 import com.github.simuxmc.rizinglava.modules.SpeedModule;
 import com.github.simuxmc.rizinglava.serialization.DataSerializer;
@@ -17,62 +17,78 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class RizingLava extends JavaPlugin{
+import java.io.File;
 
-    private DataSerializer dataSerializer;
-    private static RizingLava instance;
+public final class RizingLava extends JavaPlugin {
 
-    private ForceFieldHandler forceFieldHandler;
-    private ChatModule chatModule;
+	private DataSerializer dataSerializer;
+	private static RizingLava instance;
 
-    @Override
-    public void onLoad() {
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
-        Command.registerAllCommands(getFile(), getLogger());
-    }
+	private ForceFieldHandler forceFieldHandler;
+	private ChatModule chatModule;
+	private GlobalPersistentData globalPersistentData;
 
-    @Override
-    public void onEnable() {
-        instance = this;
-        dataSerializer = new KryoSerializer(new Kryo(), this);
-        CommandAPI.onEnable();
-        PluginManager pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new SpawnModule(), this);
-        pluginManager.registerEvents(new SpeedModule(), this);
-        forceFieldHandler = new ForceFieldHandler(pluginManager, this);
-        MiniMessage miniMessage = MiniMessage.miniMessage();
-        if (!setupChat(miniMessage)) {
-            getLogger().severe("Vault Chat was unable to be setup.");
-        }
-        pluginManager.registerEvents(chatModule, this);
-    }
+	@Override
+	public void onLoad() {
+		CommandAPI.onLoad(new CommandAPIBukkitConfig(this));
+		Command.registerAllCommands(getFile(), getLogger());
+	}
 
-    @Override
-    public void onDisable() {
-        CommandAPI.onDisable();
-    }
+	@Override
+	public void onEnable() {
+		instance = this;
+		dataSerializer = new KryoSerializer(new Kryo(), this);
+		CommandAPI.onEnable();
+		PluginManager pluginManager = Bukkit.getPluginManager();
+		initGlobalPersistentData();
+		pluginManager.registerEvents(new SpawnModule(), this);
+		pluginManager.registerEvents(new SpeedModule(), this);
+		forceFieldHandler = new ForceFieldHandler(pluginManager, this);
+		MiniMessage miniMessage = MiniMessage.miniMessage();
+		if (!setupChat(miniMessage)) {
+			getLogger().severe("Vault Chat was unable to be setup.");
+		}
+		pluginManager.registerEvents(chatModule, this);
+	}
 
-    private boolean setupChat(MiniMessage miniMessage) {
-        RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        if (rsp == null) return false;
-        chatModule = new ChatModule(rsp.getProvider(), miniMessage);
-        return true;
-    }
+	@Override
+	public void onDisable() {
+		CommandAPI.onDisable();
+	}
 
-    public DataSerializer getDataSerializer() {
-        return dataSerializer;
-    }
+	private boolean setupChat(MiniMessage miniMessage) {
+		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+		if (rsp == null) return false;
+		chatModule = new ChatModule(rsp.getProvider(), miniMessage);
+		return true;
+	}
 
-    public static RizingLava getInstance() {
-        return instance;
-    }
+	private void initGlobalPersistentData() {
+		File file = new File(getDataFolder(), "global.rl");
+		globalPersistentData = dataSerializer.deserialize(file, GlobalPersistentData.class);
+		if (globalPersistentData == null) {
+			globalPersistentData = new GlobalPersistentData(Bukkit.getWorlds().get(0).getSpawnLocation());
+		}
+	}
 
-    public ForceFieldHandler getForceFieldHandler() {
-        return forceFieldHandler;
-    }
+	public DataSerializer getDataSerializer() {
+		return dataSerializer;
+	}
 
-    public ChatModule getChat() {
-        return chatModule;
-    }
+	public static RizingLava getInstance() {
+		return instance;
+	}
+
+	public ForceFieldHandler getForceFieldHandler() {
+		return forceFieldHandler;
+	}
+
+	public ChatModule getChat() {
+		return chatModule;
+	}
+
+	public GlobalPersistentData getGlobalPersistentData() {
+		return globalPersistentData;
+	}
 
 }

@@ -11,7 +11,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
 import java.util.function.Predicate;
 
 @CommandName("invsee")

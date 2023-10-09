@@ -26,8 +26,6 @@ public class ForceFieldHandler implements Listener {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				// TODO create forcefield event and call it here so it can be cancelled elsewhere if necessary (if player
-				// TODO is spectating, in-game, etc.)
 				for (Player player : forceFieldPlayers) {
 					PlayerForceFieldEvent event = new PlayerForceFieldEvent(player);
 					pluginManager.callEvent(event);

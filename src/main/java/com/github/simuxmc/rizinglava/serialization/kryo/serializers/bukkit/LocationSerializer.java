@@ -27,7 +27,7 @@ public class LocationSerializer extends KryoDataSerializer<Location> {
 		double z = input.readDouble();
 		float pitch = input.readFloat();
 		float yaw = input.readFloat();
-		return new Location(world, x, y, z, pitch, yaw);
+		return new Location(world, x, y, z, yaw, pitch);
 	}
 
 	@Override

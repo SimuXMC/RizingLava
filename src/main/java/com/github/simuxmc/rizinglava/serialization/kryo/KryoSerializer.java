@@ -3,9 +3,11 @@ package com.github.simuxmc.rizinglava.serialization.kryo;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.github.simuxmc.rizinglava.serialization.DataSerializer;
 import com.github.simuxmc.rizinglava.serialization.kryo.serializers.KryoDataSerializer;
 import com.github.simuxmc.rizinglava.util.FileUtils;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 import org.jspecify.nullness.NullMarked;
 
 import java.io.File;
@@ -16,8 +18,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
-
-import com.github.simuxmc.rizinglava.serialization.DataSerializer;
 
 @NullMarked
 public class KryoSerializer implements DataSerializer {
@@ -30,15 +30,16 @@ public class KryoSerializer implements DataSerializer {
 	}
 
 	@Override
-	public <T> T deserialize(File file, Class<T> clazz) {
+	public <T> @Nullable T deserialize(File file, Class<T> clazz) {
 		Objects.requireNonNull(file);
 		Objects.requireNonNull(clazz);
-		if (!file.exists()) throw new IllegalArgumentException("File provided doesn't exist");
+		if (!file.exists()) return null;
+		//if (!file.exists()) throw new IllegalArgumentException("File provided doesn't exist");
 		try (FileInputStream fileStream = new FileInputStream(file);
 			 Input input = new Input(fileStream)) {
 			return kryo.readObject(input, clazz);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			return null;
 		}
 	}
 

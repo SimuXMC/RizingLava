@@ -30,8 +30,7 @@ public class FlyCommand extends Command {
 			p.setAllowFlight(!isAllowedToFly);
 			String visual = (!isAllowedToFly ? "<green>en" : "<red>dis") + "abled";
 			Component feedback = miniMessage.deserialize(
-					"<gold>Essentials> <green>" + p.getName() +
-							"<yellow>'s flight: " + visual);
+					"<gold>Essentials> <green>" + p.getName() + "<yellow>'s flight: " + visual);
 			sender.sendMessage(feedback);
 		}
 	}

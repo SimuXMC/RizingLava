@@ -27,16 +27,17 @@ public class FileUtils {
 			throw new RuntimeException(e);
 		}
 	}
+
 	@SuppressWarnings({"unchecked", "SameParameterValue"})
 	public static <T, R extends T> Class<R>[] getClasses(String pkg, Class<T> clazz, File jar) throws IOException, ClassNotFoundException {
 		List<Class<? extends T>> classes = new ArrayList<>();
 		pkg = pkg.replace('.', '/');
 		try (JarFile file = new JarFile(jar)) {
-			for (Enumeration<JarEntry> enu = file.entries(); enu.hasMoreElements();) {
+			for (Enumeration<JarEntry> enu = file.entries(); enu.hasMoreElements(); ) {
 				JarEntry jarEntry = enu.nextElement();
 				String path = jarEntry.getName();
 				if (!jarEntry.isDirectory() && path.startsWith(pkg) && path.endsWith(".class")) {
-					path = path.substring(0, path.length()-6); // 6 is the length of the ".class" string
+					path = path.substring(0, path.length() - 6); // 6 is the length of the ".class" string
 					path = path.replace('/', '.');
 					Class<?> clz = Class.forName(path);
 					if (clz.equals(clazz)) continue;
