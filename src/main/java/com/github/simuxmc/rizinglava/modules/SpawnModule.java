@@ -16,6 +16,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -93,6 +96,14 @@ public class SpawnModule implements Listener {
 		Player player = event.getPlayer();
 		if (isInSpawn(player)) event.setCancelled(true);
 	}
+
+	@EventHandler
+	private void onInventoryClick(InventoryClickEvent event) {
+		Player player = (Player) event.getWhoClicked();
+		if (!isInSpawn(player)) return;
+		if (isInCreative(player)) return;
+		if (player.getOpenInventory().getType() == InventoryType.CRAFTING) event.setCancelled(true);
+ 	}
 
 	@EventHandler
 	private void onOffHand(PlayerSwapHandItemsEvent event) {
