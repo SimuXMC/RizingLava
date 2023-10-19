@@ -29,7 +29,7 @@ public class ForceFieldHandler implements Listener {
 				for (Player player : forceFieldPlayers) {
 					PlayerForceFieldEvent event = new PlayerForceFieldEvent(player);
 					pluginManager.callEvent(event);
-					if (!event.isCancelled()) continue;
+					if (event.isCancelled()) continue;
 					List<Entity> nearbyEntities = player.getNearbyEntities(2.25, 3, 2.25);
 					nearbyEntities.remove(player);
 					nearbyEntities = nearbyEntities.stream().filter(entity -> entity instanceof Player).toList();
